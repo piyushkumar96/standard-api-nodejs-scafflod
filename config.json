@@ -1,0 +1,7 @@
+{
+	"host" : "localhost",
+	"port" : "4000",
+	"db" : "mongodb://localhost:27017/standard_api_db",
+	"jwt_expiretime" : "1h",
+	"jwt_secret" : "ThisIsMySecret"
+}
