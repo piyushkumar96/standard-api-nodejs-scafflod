@@ -7,10 +7,10 @@
 const   userSchema = require('../../models/users/usersModel'),
         logger = require('../../../logger');
 
-const   loggerName    = "[users Service]: ";
+const   loggerName    = "[usersSvc ]: ";
 
 /**
- * Generate cryptos on the basis of user parameters
+ * Create User
  * @param {String} name
  * @param {String} email
  * @param {String} password
@@ -18,13 +18,8 @@ const   loggerName    = "[users Service]: ";
  * @returns {Promise}
  */
 
-exports.createUser = function(name, email, password) {
-    
-    const user = new userSchema({
-        "name":name,
-        "email":email,
-        "password":password
-    })
+exports.createUser = function(data) {
+    const user = new userSchema(data)
 
     return new Promise(async (resolve, reject) => {
 
@@ -34,8 +29,37 @@ exports.createUser = function(name, email, password) {
             resolve({"user": user,"token":token})
 
         } catch (err) {
-            logger.error(loggerName, err);
+            logger.error(loggerName+err);
+            if (err.name === 'MongoError' && err.code === 11000) {
+                reject("User with email address exists");
+            }
             reject(err.message);
+        }
+    });
+
+}
+
+
+/**
+ * Login User
+ * @param {String} email
+ * @param {String} password
+ *
+ * @returns {Promise}
+ */
+
+exports.loginUser = function(loginData) {
+
+    return new Promise(async (resolve, reject) => {
+
+        try {
+            const user = await userSchema.findByCrendentials(loginData.email, loginData.password)
+            const token = await user.generateAuthToken()
+            resolve({"user": user,"token":token})
+
+        } catch (err) {
+            logger.error(loggerName+err);
+            reject("Authentication failed");
         }
     });
 

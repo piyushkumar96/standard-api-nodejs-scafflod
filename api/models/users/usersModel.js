@@ -85,7 +85,7 @@ userSchema.methods.generateAuthToken = async function() {
 // statics are the methods defined on the Model
 // checking that user exits or not
 userSchema.statics.findByCrendentials = async (email, password) => {
-    const user = await user.findOne({email: email})
+    const user = await users.findOne({"email": email})
 
     if(!user) {
         throw new Error("Authentication failed")
@@ -106,8 +106,8 @@ userSchema.pre('save', async function (next){
     if(user.isModified('password')){
         user.password = await bcrypt.hash(user.password, 8)
     }
-
     next()
 })
 
-module.exports = mongoose.model('userSchema', userSchema);
+const users = mongoose.model('users', userSchema);
+module.exports = users
