@@ -65,6 +65,29 @@ exports.loginUser = function(loginData) {
 
 }
 
+/**
+ * Get User
+ *
+ * @returns {Promise}
+ 
+
+exports.getUser = function() {
+
+    return new Promise(async (resolve, reject) => {
+
+        try {
+            const user = await userSchema.findByCrendentials(loginData.email, loginData.password)
+            const token = await user.generateAuthToken()
+            resolve({"user": user,"token":token})
+
+        } catch (err) {
+            logger.error(loggerName+err);
+            reject("Authentication failed");
+        }
+    });
+
+}
+*/
 
 
 

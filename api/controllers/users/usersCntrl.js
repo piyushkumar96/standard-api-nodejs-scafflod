@@ -31,14 +31,13 @@ exports.createUser = async function (req, res) {
     } catch(err) {
         logger.error(loggerName + err)
         res.status(400).json({
-            success: false,
+            success: false, 
             message: err
         });
     }
 }
 
 // function for logging user
-
 exports.loginUser = async function (req, res) {
     let  email = req.body.email,
          password = req.body.password;
@@ -52,6 +51,24 @@ exports.loginUser = async function (req, res) {
 
     try {
         let result = await usersSvc.loginUser(req.body);
+        res.status(200).json({
+            success: true,
+            message: result
+        });
+    } catch(err) {
+        logger.error(loggerName + err)
+        res.status(400).json({
+            success: false,
+            message: err
+        });
+    }
+}
+
+// function for getting user
+exports.getUser = async function (req, res) {
+
+    try {
+        let result = req.user;
         res.status(200).json({
             success: true,
             message: result

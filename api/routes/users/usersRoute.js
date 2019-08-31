@@ -5,7 +5,8 @@
 
 module.exports = function (app) {
 
-    const usersController = require('../../controllers/users/usersCntrl');
+    const   usersController = require('../../controllers/users/usersCntrl'),
+            authentication = require('../../middleware/auth');
     
     // create user route
     app.route('/api/v1/createUser')
@@ -14,5 +15,9 @@ module.exports = function (app) {
     // login user route
     app.route('/api/v1/login')
        .post(usersController.loginUser)
+
+    // get the user
+    app.route('/api/v1/user/me')
+       .get(authentication.auth, usersController.getUser)
 };
 
