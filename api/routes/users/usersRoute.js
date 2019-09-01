@@ -19,5 +19,18 @@ module.exports = function (app) {
     // get the user
     app.route('/api/v1/user/me')
        .get(authentication.auth, usersController.getUser)
+
+    // logout current session of the user
+    app.route('/api/v1/logoutCS')
+       .post(authentication.auth, usersController.logoutCS)
+
+    // logout all sessions of the user
+    app.route('/api/v1/logoutAS')
+       .post(authentication.auth, usersController.logoutAS)
+   
+
+    //update the user profile
+   //  app.route('/api/v1/login')
+   //     .patch(authentication.auth, usersController.getUser)
 };
 

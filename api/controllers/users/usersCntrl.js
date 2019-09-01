@@ -81,3 +81,38 @@ exports.getUser = async function (req, res) {
         });
     }
 }
+
+
+// function for logout user's current session
+exports.logoutCS = async function (req, res) {
+    try {
+        let result = await usersSvc.logoutCS(req);
+        res.status(200).json({
+            success: true,
+            message: result
+        });
+    } catch(err) {
+        logger.error(loggerName + err)
+        res.status(500).json({
+            success: false,
+            message: err
+        });
+    }
+}
+
+// function for logout user's all session
+exports.logoutAS = async function (req, res) {
+    try {
+        let result = await usersSvc.logoutAS(req);
+        res.status(200).json({
+            success: true,
+            message: result
+        });
+    } catch(err) {
+        logger.error(loggerName + err)
+        res.status(500).json({
+            success: false,
+            message: err
+        });
+    }
+}

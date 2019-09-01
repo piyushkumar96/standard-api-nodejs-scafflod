@@ -65,6 +65,7 @@ exports.loginUser = function(loginData) {
 
 }
 
+
 /**
  * Get User
  *
@@ -90,4 +91,50 @@ exports.getUser = function() {
 */
 
 
+/**
+ * Logout User's Current Session
+ *
+ * @returns {Promise}
+ */
 
+exports.logoutCS = function(loginData) {
+
+    return new Promise(async (resolve, reject) => {
+
+        try {
+            loginData.user.tokens = loginData.user.tokens.filter((token) => {
+                return token.token !== loginData.token
+            })
+            await loginData.user.save()
+            resolve("LogOut Current Session Succesfully")
+
+        } catch (err) {
+            logger.error(loggerName+err);
+            reject("Something failed, Please retry");
+        }
+    });
+
+}
+
+/**
+ * Logout User's All Sessions
+ *
+ * @returns {Promise}
+ */
+
+exports.logoutAS = function(loginData) {
+
+    return new Promise(async (resolve, reject) => {
+
+        try {
+            loginData.user.tokens = []
+            await loginData.user.save()
+            resolve("LogOut All Sessions Succesfully")
+
+        } catch (err) {
+            logger.error(loggerName+err);
+            reject("Something failed, Please retry");
+        }
+    });
+
+}
