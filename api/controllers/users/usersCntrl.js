@@ -116,3 +116,54 @@ exports.logoutAS = async function (req, res) {
         });
     }
 }
+
+// function for update the user's profile
+exports.updateUser = async function (req, res) {
+    try {
+        let result = await usersSvc.updateUser(req);
+        res.status(200).json({
+            success: true,
+            message: result
+        });
+    } catch(err) {
+        logger.error(loggerName + err)
+        res.status(400).json({
+            success: false,
+            message: err
+        });
+    }
+}
+
+// function for update the user's password
+exports.updatePassword = async function (req, res) {
+    
+    let  password = req.body.oldPassword,
+         newPassword = req.body.newPassword,
+         cfmPassword = req.body.cfmPassword;
+
+    if (!password || !newPassword || !cfmPassword) {
+        res.status(400).json({
+            success: false,
+            message: 'Missing parameters!!!'
+        });
+    }else if(newPassword !== cfmPassword){
+        res.status(400).json({
+            success: false,
+            message: 'Password did not Match!!!'
+        });
+    }
+    
+    try {
+        let result = await usersSvc.updatePassword(req);
+        res.status(200).json({
+            success: true,
+            message: result
+        });
+    } catch(err) {
+        logger.error(loggerName + err)
+        res.status(400).json({
+            success: false,
+            message: err
+        });
+    }
+}

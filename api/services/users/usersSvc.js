@@ -3,6 +3,8 @@
 */
 'use strict';
 
+//External Modules 
+const   bcrypt      = require('bcryptjs');
 // Internal Modules
 const   userSchema = require('../../models/users/usersModel'),
         logger = require('../../../logger');
@@ -97,15 +99,15 @@ exports.getUser = function() {
  * @returns {Promise}
  */
 
-exports.logoutCS = function(loginData) {
+exports.logoutCS = function(data) {
 
     return new Promise(async (resolve, reject) => {
 
         try {
-            loginData.user.tokens = loginData.user.tokens.filter((token) => {
-                return token.token !== loginData.token
+            data.user.tokens = data.user.tokens.filter((token) => {
+                return token.token !== data.token
             })
-            await loginData.user.save()
+            await data.user.save()
             resolve("LogOut Current Session Succesfully")
 
         } catch (err) {
@@ -122,18 +124,81 @@ exports.logoutCS = function(loginData) {
  * @returns {Promise}
  */
 
-exports.logoutAS = function(loginData) {
+exports.logoutAS = function(data) {
 
     return new Promise(async (resolve, reject) => {
 
         try {
-            loginData.user.tokens = []
-            await loginData.user.save()
+            data.user.tokens = []
+            await data.user.save()
             resolve("LogOut All Sessions Succesfully")
 
         } catch (err) {
             logger.error(loggerName+err);
             reject("Something failed, Please retry");
+        }
+    });
+
+}
+
+/**
+ * Update user's profile
+ *
+ * @returns {Promise}
+ */
+
+exports.updateUser = function(data) {
+
+    return new Promise(async (resolve, reject) => {
+
+        const updates = Object.keys(data.body)
+        const allowedUpdates = ["name", "email", "age"]
+        const isvalidOperation = updates.every((updates) =>  allowedUpdates.includes(updates))
+
+        if (!isvalidOperation){
+            reject("Invalid updates!!!")
+        }
+
+        try {
+            updates.forEach((update) => data.user[update] = data.body[update])
+            await data.user.save()
+            resolve("User Succesfully Updated")
+
+        } catch (err) {
+            logger.error(loggerName+err);
+            reject("Something failed, Please retry");
+        }
+    });
+
+}
+
+
+/**
+ * Update user's profile
+ * @param {String} oldPassword
+ * @param {String} newPassword
+ *
+ * @returns {Promise}
+ */
+
+exports.updatePassword = function(data) {
+
+    return new Promise(async (resolve, reject) => {
+
+        try {
+
+            const isvalidOperation = bcrypt.compareSync(data.body.oldPassword, data.user.password)
+            if (!isvalidOperation){
+                reject("Incorrect Old password!!!")
+            }
+            
+            data.user.password = data.body.newPassword
+            await data.user.save()
+            resolve("Password Succesfully Updated")
+
+        } catch (err) {
+            logger.error(loggerName+err);
+            reject(err.message);
         }
     });
 

@@ -29,8 +29,12 @@ module.exports = function (app) {
        .post(authentication.auth, usersController.logoutAS)
    
 
-    //update the user profile
-   //  app.route('/api/v1/login')
-   //     .patch(authentication.auth, usersController.getUser)
+    //update the user's profile
+    app.route('/api/v1/updateUser')
+       .patch(authentication.auth, usersController.updateUser)
+   
+    //update the user's password
+    app.route('/api/v1/updatePassword')
+       .patch(authentication.auth, usersController.updatePassword)
 };
 
