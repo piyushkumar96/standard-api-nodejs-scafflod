@@ -37,4 +37,3 @@ module.exports = function (app) {
     app.route('/api/v1/updatePassword')
        .patch(authentication.auth, usersController.updatePassword)
 };
-
