@@ -14,7 +14,7 @@ const   express     = require('express'),       // for creating the http server
         require('dotenv').config();             // loads environment variables from a .env file into process.env. 
 
 //Internal modules
-const   config = require('./config.json'),      // contains golbal configuration varibales
+const   config = require('./config/config.json'),      // contains golbal configuration varibales
         logger = require('./logger'),           // logger confriguration files    
         userRoutes = require('./api/routes/users/usersRoute');  
 
