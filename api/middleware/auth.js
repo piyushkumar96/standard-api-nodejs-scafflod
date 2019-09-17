@@ -9,7 +9,7 @@ const   jwt = require('jsonwebtoken');
 
 // Internal Modules
 const   userSchema = require('../models/users/usersModel'),
-        config = require('../../config.json'),
+        config = require('../../config/config.json'),
         logger = require('../../logger');
 
 const   loggerName    = "[authMiddleware ]: ";

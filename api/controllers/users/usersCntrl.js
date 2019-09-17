@@ -16,6 +16,7 @@ exports.createUser = async function (req, res) {
          password = req.body.password;
 
     if (!name || !email || !password) {
+        logger.error(loggerName + "Invalid Parameters while creating User !!!")
         res.status(400).json({
             success: false,
             message: 'Invalid parameters'
@@ -43,6 +44,7 @@ exports.loginUser = async function (req, res) {
          password = req.body.password;
 
     if (!email || !password) {
+        logger.error(loggerName + "Invalid Parameters while logging User !!!")
         res.status(400).json({
             success: false,
             message: 'Invalid parameters'
@@ -51,6 +53,7 @@ exports.loginUser = async function (req, res) {
 
     try {
         let result = await usersSvc.loginUser(req.body);
+        logger.info("User logined Succefully @@@")
         res.status(200).json({
             success: true,
             message: result
@@ -69,6 +72,7 @@ exports.getUser = async function (req, res) {
 
     try {
         let result = req.user;
+        logger.info("Get the User @@@")
         res.status(200).json({
             success: true,
             message: result

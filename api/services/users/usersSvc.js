@@ -28,6 +28,7 @@ exports.createUser = function(data) {
         try {
             await user.save()
             const token = await user.generateAuthToken()
+            logger.info(loggerName+ "User Created Successfully @@@")
             resolve({"user": user,"token":token})
 
         } catch (err) {
@@ -57,6 +58,7 @@ exports.loginUser = function(loginData) {
         try {
             const user = await userSchema.findByCrendentials(loginData.email, loginData.password)
             const token = await user.generateAuthToken()
+            logger.info(loggerName+ "User " +user.name+ " login Successfully @@@")
             resolve({"user": user,"token":token})
 
         } catch (err) {
@@ -108,6 +110,7 @@ exports.logoutCS = function(data) {
                 return token.token !== data.token
             })
             await data.user.save()
+            logger.info(loggerName+ "User " +user.name+ " LogOut Current Session Succesfully @@@")
             resolve("LogOut Current Session Succesfully")
 
         } catch (err) {
@@ -131,6 +134,7 @@ exports.logoutAS = function(data) {
         try {
             data.user.tokens = []
             await data.user.save()
+            logger.info(loggerName+ "User " +user.name+ " LogOut All Sessions Succesfully @@@")
             resolve("LogOut All Sessions Succesfully")
 
         } catch (err) {
@@ -162,6 +166,7 @@ exports.updateUser = function(data) {
         try {
             updates.forEach((update) => data.user[update] = data.body[update])
             await data.user.save()
+            logger.info(loggerName+ "User " +data.user.name+ " User Succesfully Updated @@@")
             resolve("User Succesfully Updated")
 
         } catch (err) {
@@ -189,11 +194,13 @@ exports.updatePassword = function(data) {
 
             const isvalidOperation = bcrypt.compareSync(data.body.oldPassword, data.user.password)
             if (!isvalidOperation){
+                logger.info(loggerName+ "User " +user.name+ " Incorrect Old password !!!")
                 reject("Incorrect Old password!!!")
             }
             
             data.user.password = data.body.newPassword
             await data.user.save()
+            logger.info(loggerName+ "User " +user.name+ " Password Succesfully Updated @@@")
             resolve("Password Succesfully Updated")
 
         } catch (err) {

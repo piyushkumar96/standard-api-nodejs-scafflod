@@ -10,7 +10,7 @@ const   mongoose    = require('mongoose'),
         jwt         = require('jsonwebtoken');
 
 //Internal modules
-const   config    = require('../../../config.json');
+const   config    = require('../../../config/config.json');
 
 const Schema = mongoose.Schema;
 
