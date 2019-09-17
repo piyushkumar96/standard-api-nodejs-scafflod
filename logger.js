@@ -14,7 +14,7 @@ if (!fs.existsSync(logDir)) {
 // define the custom settings for each transport (file, console)
 var options = {
   infofile: {
-    level: 'info',
+    //level: 'info',
     filename: `${appRoot}/logs/app.log`,
     handleExceptions: true,
     json: true,
