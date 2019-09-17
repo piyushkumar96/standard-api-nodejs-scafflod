@@ -72,3 +72,5 @@ app.use(function (req, res, next) {
 app.listen(port);
 
 logger.info('[Server]: UNDP api server started on: ' + port);
+
+module.exports = app

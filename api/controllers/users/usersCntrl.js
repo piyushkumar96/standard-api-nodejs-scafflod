@@ -25,7 +25,7 @@ exports.createUser = async function (req, res) {
 
     try {
         let result = await usersSvc.createUser(req.body);
-        res.status(202).json({
+        res.status(201).json({
             success: true,
             message: result
         });
