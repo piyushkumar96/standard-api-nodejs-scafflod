@@ -5,5 +5,5 @@
 	"jwt_expiretime" : "1h",
 	"jwt_secret" : "ThisIsMySecret",
 	"senderEmailID" : "piyushjio25032@gmail.com",
-	"sendgrid_api_key" : "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"
+	"sendgrid_api_key" : "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"
 }
