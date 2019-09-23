@@ -7,7 +7,8 @@
 const   bcrypt      = require('bcryptjs');
 // Internal Modules
 const   userSchema = require('../../models/users/usersModel'),
-        logger = require('../../../logger');
+        logger = require('../../../logger'),
+        emailHlp = require('../../helpers/email/emailHlp');
 
 const   loggerName    = "[usersSvc ]: ";
 
@@ -27,6 +28,7 @@ exports.createUser = function(data) {
 
         try {
             await user.save()
+            emailHlp.sendWelcomeMail(user.name, user.email)
             const token = await user.generateAuthToken()
             logger.info(loggerName+ "User Created Successfully @@@")
             resolve({"user": user,"token":token})
@@ -110,7 +112,7 @@ exports.logoutCS = function(data) {
                 return token.token !== data.token
             })
             await data.user.save()
-            logger.info(loggerName+ "User " +user.name+ " LogOut Current Session Succesfully @@@")
+            logger.info(loggerName+ "User " +data.user.name+ " LogOut Current Session Succesfully @@@")
             resolve("LogOut Current Session Succesfully")
 
         } catch (err) {
@@ -134,7 +136,7 @@ exports.logoutAS = function(data) {
         try {
             data.user.tokens = []
             await data.user.save()
-            logger.info(loggerName+ "User " +user.name+ " LogOut All Sessions Succesfully @@@")
+            logger.info(loggerName+ "User " +data.user.name+ " LogOut All Sessions Succesfully @@@")
             resolve("LogOut All Sessions Succesfully")
 
         } catch (err) {
@@ -194,18 +196,42 @@ exports.updatePassword = function(data) {
 
             const isvalidOperation = bcrypt.compareSync(data.body.oldPassword, data.user.password)
             if (!isvalidOperation){
-                logger.info(loggerName+ "User " +user.name+ " Incorrect Old password !!!")
+                logger.info(loggerName+ "User " +data.user.name+ " Incorrect Old password !!!")
                 reject("Incorrect Old password!!!")
             }
             
             data.user.password = data.body.newPassword
             await data.user.save()
-            logger.info(loggerName+ "User " +user.name+ " Password Succesfully Updated @@@")
+            logger.info(loggerName+ "User " +data.user.name+ " Password Succesfully Updated @@@")
             resolve("Password Succesfully Updated")
 
         } catch (err) {
             logger.error(loggerName+err);
             reject(err.message);
+        }
+    });
+
+}
+
+/**
+ * delete user profile
+ *
+ * @returns {Promise}
+ */
+
+exports.deleteUser = function(data) {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            
+            await data.user.remove()
+            emailHlp.sendGoodbyeMail(data.user.name, data.user.email)
+            logger.info(loggerName+ "User " +data.user.name+ " User Succesfully deleted @@@")
+            resolve("User Succesfully Deleted   ")
+
+        } catch (err) {
+            logger.error(loggerName+err);
+            reject("Something failed, Please retry");
         }
     });
 

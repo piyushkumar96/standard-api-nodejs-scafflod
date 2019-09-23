@@ -171,3 +171,21 @@ exports.updatePassword = async function (req, res) {
         });
     }
 }
+
+
+// function for deleting the user
+exports.deleteUser = async function (req, res) {
+    try {
+        let result = await usersSvc.deleteUser(req);
+        res.status(200).json({
+            success: true,
+            message: result
+        });
+    } catch(err) {
+        logger.error(loggerName + err)
+        res.status(500).json({
+            success: false,
+            message: err
+        });
+    }
+}

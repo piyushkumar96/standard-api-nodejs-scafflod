@@ -36,4 +36,8 @@ module.exports = function (app) {
     //update the user's password
     app.route('/api/v1/updatePassword')
        .patch(authentication.auth, usersController.updatePassword)
+   
+   //delete the user
+   app.route('/api/v1/deleteUser')
+   .delete(authentication.auth, usersController.deleteUser)
 };
